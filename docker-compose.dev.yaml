@@ -1,0 +1,11 @@
+services:
+  api-server:
+    container_name: api-server
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile.dev
+    working_dir: /hiven
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/app:/hiven
