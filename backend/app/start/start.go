@@ -1,6 +1,13 @@
 package start
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"log"
+
+	"github.com/HivenOrg/Hiven/config"
+	"github.com/HivenOrg/Hiven/database"
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+)
 
 /*
 Loading environment variables and connecting to database is seperated from setting up the fiber app
@@ -8,11 +15,23 @@ This is done to make automated testing possible
 */
 
 func Server() *fiber.App {
-	app := BuildApp()
+
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("failed to load environment variables: %v", err)
+	}
+
+	db, err := database.ConnectToDB(cfg.DB_HOST, cfg.DB_USER, cfg.DB_PASSWORD, cfg.DB_NAME, cfg.DB_PORT, cfg.DB_SSLMODE)
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+
+	app := BuildApp(db)
+
 	return app
 }
 
-func BuildApp() *fiber.App {
+func BuildApp(db *gorm.DB) *fiber.App {
 
 	app := fiber.New()
 

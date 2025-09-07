@@ -10,6 +10,13 @@ RUN go mod download
 
 COPY ../app ./
 
+ENV DB_HOST=postgres-db
+ENV DB_USER=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_NAME=HivenDB
+ENV DB_PORT=5432
+ENV DB_SSLMODE=disable
+
 EXPOSE 3000
 
 CMD ["air", "-c", ".air.toml"]
