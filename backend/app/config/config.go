@@ -12,6 +12,7 @@ type Config struct {
 	DB_NAME     string
 	DB_PORT     string
 	DB_SSLMODE  string
+	STAGE       string
 }
 
 func LoadConfig() (*Config, error) {
@@ -36,6 +37,9 @@ func LoadConfig() (*Config, error) {
 	}
 	if cfg.DB_SSLMODE, ok = os.LookupEnv("DB_SSLMODE"); !ok {
 		return nil, fmt.Errorf("missing DB_SSLMODE")
+	}
+	if cfg.STAGE, ok = os.LookupEnv("STAGE"); !ok {
+		return nil, fmt.Errorf("missing STAGE")
 	}
 
 	return &cfg, nil

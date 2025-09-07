@@ -23,6 +23,7 @@ services:
       - "8080:8080"
     volumes:
       - ./pgadmin-setup/servers.json:/pgadmin4/servers.json:ro
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres-db
 
@@ -39,6 +40,7 @@ services:
       DB_NAME: HivenDB
       DB_PORT: 5432
       DB_SSLMODE: disable
+      STAGE: dev
     ports:
       - "3000:3000"
     volumes:
@@ -48,3 +50,4 @@ services:
 
 volumes:
   postgres_data:
+  pgadmin_data:
