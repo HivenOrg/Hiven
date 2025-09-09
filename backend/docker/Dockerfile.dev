@@ -10,6 +10,7 @@ RUN go mod download
 
 COPY ../app ./
 
+# Environment variables hardcoded for dev
 ENV DB_HOST=postgres-db
 ENV DB_USER=postgres
 ENV DB_PASSWORD=postgres
@@ -17,6 +18,8 @@ ENV DB_NAME=HivenDB
 ENV DB_PORT=5432
 ENV DB_SSLMODE=disable
 ENV STAGE=dev
+ENV JWT_SECRET_KEY=supersecretkey123
+ENV TOKEN_EXPIRES_IN_HOURS=1
 
 EXPOSE 3000
 

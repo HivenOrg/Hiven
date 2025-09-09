@@ -5,6 +5,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func ConnectToDB(host, user, password, dbname, port, sslmode, stage string) (*gorm.DB, error) {
@@ -14,7 +15,9 @@ func ConnectToDB(host, user, password, dbname, port, sslmode, stage string) (*go
 		host, user, password, dbname, port, sslmode,
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}

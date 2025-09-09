@@ -41,6 +41,8 @@ services:
       DB_PORT: 5432
       DB_SSLMODE: disable
       STAGE: dev
+      JWT_SECRET_KEY: supersecretkey123
+      TOKEN_EXPIRES_IN_HOURS: 1
     ports:
       - "3000:3000"
     volumes:

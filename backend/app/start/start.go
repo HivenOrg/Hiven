@@ -7,15 +7,9 @@ import (
 	"github.com/HivenOrg/Hiven/database"
 	"github.com/HivenOrg/Hiven/routers/auth"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
-/*
-Loading environment variables and connecting to database is seperated from setting up the fiber app
-This is done to make automated testing possible
-*/
-
-func Server() *fiber.App {
+func BuildApp() *fiber.App {
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -26,13 +20,6 @@ func Server() *fiber.App {
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
-
-	app := BuildApp(db)
-
-	return app
-}
-
-func BuildApp(db *gorm.DB) *fiber.App {
 
 	app := fiber.New()
 
@@ -45,7 +32,7 @@ func BuildApp(db *gorm.DB) *fiber.App {
 	})
 
 	// Adding auth routes
-	auth.AuthRouter(app.Group("/auth"), db)
+	auth.AuthRouter(app.Group("/auth"), db, cfg)
 
 	return app
 }
