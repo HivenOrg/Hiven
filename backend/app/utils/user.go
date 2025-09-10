@@ -23,6 +23,21 @@ func UserWithEmailExists(email string, db *gorm.DB) (bool, error) {
 	return true, nil // user found
 }
 
+func GetUserByEmail(email string, db *gorm.DB) (*database.User, error) {
+
+	var user database.User
+	result := db.Where("email = ?", email).First(&user)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil // user not found
+		}
+		return nil, result.Error // some other db error
+	}
+
+	return &user, nil // user found
+}
+
 func UserWithPhoneNumberExists(phoneNumber string, db *gorm.DB) (bool, error) {
 
 	var user database.User

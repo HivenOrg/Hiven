@@ -66,4 +66,38 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{"bearer_token": token})
 	})
+
+	router.Post("/login", func(c *fiber.Ctx) error {
+
+		var reqBody LoginRequestSchema
+
+		// Parsing and Validating
+		err := utils.ParseAndValidate(c, &reqBody)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		}
+
+		// Check if user exists and get from DB
+		user, err := utils.GetUserByEmail(reqBody.Email, db)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		if user == nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"msg": "invalid credentials"})
+		}
+
+		// Compare password
+		passwordValid := utils.CheckPassword(user.Password, reqBody.Password)
+		if !passwordValid {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"msg": "invalid credentials"})
+		}
+
+		// Generating JWT token
+		token, err := utils.GenerateJWT(user.ID, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.JSON(fiber.Map{"bearer_token": token})
+	})
 }
