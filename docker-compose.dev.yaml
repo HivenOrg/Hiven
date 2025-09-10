@@ -1,11 +1,55 @@
 services:
+
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:17.6-alpine3.22
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: HivenDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: elestio/pgadmin:REL-9_6
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./pgadmin-setup/servers.json:/pgadmin4/servers.json:ro
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres-db
+
   api-server:
     container_name: api-server
     build:
       context: ./backend
       dockerfile: docker/Dockerfile.dev
     working_dir: /hiven
+    environment:
+      DB_HOST: postgres-db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: HivenDB
+      DB_PORT: 5432
+      DB_SSLMODE: disable
+      STAGE: dev
+      JWT_SECRET_KEY: supersecretkey123
+      TOKEN_EXPIRES_IN_HOURS: 1
     ports:
       - "3000:3000"
     volumes:
       - ./backend/app:/hiven
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres_data:
+  pgadmin_data:
