@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -28,9 +29,9 @@ func ConnectToDB(host, user, password, dbname, port, sslmode, stage string) (*go
 	}
 
 	if stage == "dev" {
-		err = db.AutoMigrate(&User{})
+		err := ExecuteSQLFile(db, "./database/create_tables.sql")
 		if err != nil {
-			return nil, fmt.Errorf("failed to auto-migrate tables: %w", err)
+			return nil, err
 		}
 	}
 
@@ -47,6 +48,25 @@ func ping(db *gorm.DB) error {
 	err = sqlDB.Ping()
 	if err != nil {
 		return fmt.Errorf("failed to ping database: %w", err)
+	}
+
+	return nil
+}
+
+func ExecuteSQLFile(db *gorm.DB, filePath string) error {
+
+	// Read the file
+	sqlBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read SQL file %s: %w", filePath, err)
+	}
+
+	sqlContent := string(sqlBytes)
+
+	// Execute the SQL content
+	err = db.Exec(sqlContent).Error
+	if err != nil {
+		return fmt.Errorf("failed to execute SQL file %s: %w", filePath, err)
 	}
 
 	return nil

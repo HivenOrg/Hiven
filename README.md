@@ -3,11 +3,11 @@ The Ultimate Roomate App
 
 ## To run the servers in development mode
 
-**Start command:** `docker-compose -f docker-compose.dev.yaml -p hiven-dev up -d`
+**Start command:** `docker compose -f docker-compose.dev.yaml -p hiven-dev up -d`
 
 > Note: The API server might take a few seconds to become available after the container starts because Air performs a rebuild and then starts the application.
 
-**Stop command:** `docker-compose -f docker-compose.dev.yaml -p hiven-dev down`
+**Stop command:** `docker compose -f docker-compose.dev.yaml -p hiven-dev down`
 
 ## Try the API
 
