@@ -53,3 +53,16 @@ func UserWithPhoneNumberExists(phoneNumber string, db *gorm.DB) (bool, error) {
 
 	return true, nil // user found
 }
+
+func GetHiveIDsForUser(userID uint, db *gorm.DB) ([]uint, error) {
+
+	var hiveIDs []uint
+
+	err := db.Model(&database.Member{}).Where("user_id = ?", userID).Pluck("hive_id", &hiveIDs).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return hiveIDs, nil
+}

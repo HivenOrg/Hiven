@@ -59,12 +59,15 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Generating JWT token
-		token, err := utils.GenerateJWT(newUser.ID, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		token, err := utils.GenerateJWT(newUser.ID, []uint{}, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 
-		return c.Status(fiber.StatusCreated).JSON(fiber.Map{"bearer_token": token})
+		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+			"bearer_token":       token,
+			"expires_in_seconds": cfg.TOKEN_EXPIRES_IN_HOURS * 3600,
+		})
 	})
 
 	router.Post("/login", func(c *fiber.Ctx) error {
@@ -92,12 +95,21 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"msg": "invalid credentials"})
 		}
 
-		// Generating JWT token
-		token, err := utils.GenerateJWT(user.ID, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		// Getting hive IDs
+		hiveIDs, err := utils.GetHiveIDsForUser(user.ID, db)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 
-		return c.JSON(fiber.Map{"bearer_token": token})
+		// Generating JWT token
+		token, err := utils.GenerateJWT(user.ID, hiveIDs, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.JSON(fiber.Map{
+			"bearer_token":       token,
+			"expires_in_seconds": cfg.TOKEN_EXPIRES_IN_HOURS * 3600,
+		})
 	})
 }
