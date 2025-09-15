@@ -28,8 +28,8 @@ func ConnectToDB(host, user, password, dbname, port, sslmode, stage string) (*go
 		return nil, err
 	}
 
-	if stage == "dev" {
-		err := ExecuteSQLFile(db, "./database/create_tables.sql")
+	if stage == "dev" || stage == "test" {
+		err := CreateTables(db, stage)
 		if err != nil {
 			return nil, err
 		}
@@ -53,7 +53,17 @@ func ping(db *gorm.DB) error {
 	return nil
 }
 
-func ExecuteSQLFile(db *gorm.DB, filePath string) error {
+func CreateTables(db *gorm.DB, stage string) error {
+
+	var filePath string
+
+	if stage == "dev" {
+		filePath = "./database/create_tables.sql"
+	} else if stage == "test" {
+		filePath = "../../database/create_tables.sql"
+	} else {
+		return fmt.Errorf("failed to create tables: invalid stage")
+	}
 
 	// Read the file
 	sqlBytes, err := os.ReadFile(filePath)
