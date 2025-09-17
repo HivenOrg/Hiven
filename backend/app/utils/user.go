@@ -7,26 +7,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func UserWithEmailExists(email string, db *gorm.DB) (bool, error) {
+func getUserByField(field string, value any, db *gorm.DB) (*database.User, error) {
 
 	var user database.User
-	result := db.Where("email = ?", email).First(&user)
-
-	if result.Error != nil {
-
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return false, nil // user not found
-		}
-		return false, result.Error // some other db error
-	}
-
-	return true, nil // user found
-}
-
-func GetUserByEmail(email string, db *gorm.DB) (*database.User, error) {
-
-	var user database.User
-	result := db.Where("email = ?", email).First(&user)
+	result := db.Where(field+" = ?", value).First(&user)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -34,24 +18,19 @@ func GetUserByEmail(email string, db *gorm.DB) (*database.User, error) {
 		}
 		return nil, result.Error // some other db error
 	}
-
 	return &user, nil // user found
 }
 
-func UserWithPhoneNumberExists(phoneNumber string, db *gorm.DB) (bool, error) {
+func GetUserById(id uint, db *gorm.DB) (*database.User, error) {
+	return getUserByField("id", id, db)
+}
 
-	var user database.User
-	result := db.Where("phone_number = ?", phoneNumber).First(&user)
+func GetUserByEmail(email string, db *gorm.DB) (*database.User, error) {
+	return getUserByField("email", email, db)
+}
 
-	if result.Error != nil {
-
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return false, nil // user not found
-		}
-		return false, result.Error // some other db error
-	}
-
-	return true, nil // user found
+func GetUserByPhoneNumber(phoneNumber string, db *gorm.DB) (*database.User, error) {
+	return getUserByField("phone_number", phoneNumber, db)
 }
 
 func GetHiveIDsForUser(userID uint, db *gorm.DB) ([]uint, error) {

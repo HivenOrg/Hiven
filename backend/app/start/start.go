@@ -5,6 +5,7 @@ import (
 
 	"github.com/HivenOrg/Hiven/config"
 	"github.com/HivenOrg/Hiven/database"
+	"github.com/HivenOrg/Hiven/middleware"
 	"github.com/HivenOrg/Hiven/routers/auth"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -26,10 +27,10 @@ func Server() *fiber.App {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
 
-	return BuildApp(cfg, db)
+	return BuildApp(*cfg, db)
 }
 
-func BuildApp(cfg *config.Config, db *gorm.DB) *fiber.App {
+func BuildApp(cfg config.Config, db *gorm.DB) *fiber.App {
 
 	app := fiber.New()
 
@@ -43,6 +44,13 @@ func BuildApp(cfg *config.Config, db *gorm.DB) *fiber.App {
 
 	// Adding auth routes
 	auth.AuthRouter(app.Group("/auth"), db, cfg)
+
+	// Protecting non-auth routes
+	app.Use(middleware.AuthMiddleware(db, cfg))
+
+	app.Get("/test/protected", func(c *fiber.Ctx) error {
+		return c.SendString("Token is valid")
+	})
 
 	return app
 }

@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
+func AuthRouter(router fiber.Router, db *gorm.DB, cfg config.Config) {
 
 	router.Post("/register", func(c *fiber.Ctx) error {
 
@@ -21,20 +21,20 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Email exists
-		exists, err := utils.UserWithEmailExists(reqBody.Email, db)
+		user, err := utils.GetUserByEmail(reqBody.Email, db)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		if exists {
+		if user != nil {
 			return c.Status(fiber.StatusConflict).JSON(fiber.Map{"msg": "email is already in use"})
 		}
 
 		// Phone number exists
-		exists, err = utils.UserWithPhoneNumberExists(reqBody.PhoneNumber, db)
+		user, err = utils.GetUserByPhoneNumber(reqBody.PhoneNumber, db)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		if exists {
+		if user != nil {
 			return c.Status(fiber.StatusConflict).JSON(fiber.Map{"msg": "phone number is already in use"})
 		}
 
@@ -59,7 +59,7 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Generating JWT token
-		token, err := utils.GenerateJWT(newUser.ID, []uint{}, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		token, err := utils.GenerateJWT(newUser.ID, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
@@ -95,14 +95,8 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg *config.Config) {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"msg": "invalid credentials"})
 		}
 
-		// Getting hive IDs
-		hiveIDs, err := utils.GetHiveIDsForUser(user.ID, db)
-		if err != nil {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-
 		// Generating JWT token
-		token, err := utils.GenerateJWT(user.ID, hiveIDs, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
+		token, err := utils.GenerateJWT(user.ID, cfg.JWT_SECRET_KEY, cfg.TOKEN_EXPIRES_IN_HOURS)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
