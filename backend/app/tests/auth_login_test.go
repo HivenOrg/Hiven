@@ -81,7 +81,7 @@ func TestLoginIncorrectPassword(t *testing.T) {
 		t.Fatal("testDB reset failed")
 	}
 
-	dummyUser, err := createDummyUser(testDB)
+	dummyUser, _, err := createDummyUser(testDB, cfg.JWT_SECRET_KEY)
 	if err != nil {
 		t.Fatalf("unable to create dummy user: %v", err)
 	}
@@ -111,7 +111,7 @@ func TestLogin(t *testing.T) {
 		t.Fatal("testDB reset failed")
 	}
 
-	dummyUser, err := createDummyUser(testDB)
+	dummyUser, _, err := createDummyUser(testDB, cfg.JWT_SECRET_KEY)
 	if err != nil {
 		t.Fatalf("unable to create dummy user: %v", err)
 	}

@@ -8,13 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func createDummyUser(testDB *gorm.DB) (*database.User, error) {
+func createDummyUser(testDB *gorm.DB, jwtSecretKey string) (*database.User, string, error) {
 
 	plainPassword := "iwillfindit"
 	hashedPassword, err := utils.HashPassword(plainPassword)
 
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	user := &database.User{
@@ -26,12 +26,17 @@ func createDummyUser(testDB *gorm.DB) (*database.User, error) {
 	}
 
 	if err := testDB.Create(user).Error; err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	user.Password = plainPassword //returning user with plain password
 
-	return user, nil
+	token, err := utils.GenerateJWT(user.ID, jwtSecretKey, 1)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
 }
 
 func resetTestDB(testDB *gorm.DB, stage string) error {
