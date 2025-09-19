@@ -1,0 +1,40 @@
+services:
+
+  postgres-test-db:
+    container_name: postgres-test-db
+    image: postgres:17.6-alpine3.22
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: HivenTestDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api-server:
+    container_name: api-server
+    build:
+      context: ../../backend
+      dockerfile: docker/Dockerfile.test
+    working_dir: /hiven
+    environment:
+      DB_HOST: postgres-test-db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: HivenTestDB
+      DB_PORT: 5432
+      DB_SSLMODE: disable
+      STAGE: test
+      JWT_SECRET_KEY: testsecretkey456
+      TOKEN_EXPIRES_IN_HOURS: 1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../../backend/app:/hiven
+    command: go test -v ./tests
+    depends_on:
+      - postgres-test-db
+
+volumes:
+  postgres_data:

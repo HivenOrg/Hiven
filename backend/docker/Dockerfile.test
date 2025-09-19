@@ -1,0 +1,21 @@
+FROM golang:1.25.0-alpine3.22
+
+WORKDIR /hiven
+
+COPY ../app/go.mod ../app/go.sum ./
+RUN go mod download
+
+COPY ../app ./
+
+# Environment variables hardcoded for test
+ENV DB_HOST=postgres-test-db
+ENV DB_USER=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_NAME=HivenTestDB
+ENV DB_PORT=5432
+ENV DB_SSLMODE=disable
+ENV STAGE=test
+ENV JWT_SECRET_KEY=testsecretkey456
+ENV TOKEN_EXPIRES_IN_HOURS=1
+
+CMD ["go", "test", "-v", "./tests"]

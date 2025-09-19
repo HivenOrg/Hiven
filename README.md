@@ -1,18 +1,24 @@
 # Hiven
 The Ultimate Roomate App
 
-## To run the servers in development mode
+## Project Setup
 
-**Start command:** `docker compose -f docker-compose.dev.yaml -p hiven-dev up -d`
+> All environments use Docker and Make. No other dependencies are required.
 
-> Note: The API server might take a few seconds to become available after the container starts because Air performs a rebuild and then starts the application.
+### Development environment
+**Steps**:
+- `cd /setup/dev`
+- `make start` to start development environment
+- `make stop` to stop development environment
 
-**Stop command:** `docker compose -f docker-compose.dev.yaml -p hiven-dev down`
-
-## Try the API
-
-- Import `Hiven-API.postman_collection.json` into Postman to test the API endpoints.
+**Try the API**
+- Import `backend/postman-collection/Hiven-API.postman_collection.json` into Postman to test the API endpoints.
 - The collection uses the base URL: **http://localhost:3000** 
+
+### Testing environment
+**Steps**:
+- `cd /setup/test`
+- `make tests` will run tests in an isolated environment and output the results
 
 ## 🤝 Maintainers
 

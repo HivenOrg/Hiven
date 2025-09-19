@@ -8,9 +8,9 @@ import (
 
 func main() {
 
-	app := start.BuildApp()
+	server := start.Server()
 
-	err := app.Listen(":3000")
+	err := server.Listen(":3000")
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

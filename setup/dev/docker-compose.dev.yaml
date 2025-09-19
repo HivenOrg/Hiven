@@ -30,7 +30,7 @@ services:
   api-server:
     container_name: api-server
     build:
-      context: ./backend
+      context: ../../backend
       dockerfile: docker/Dockerfile.dev
     working_dir: /hiven
     environment:
@@ -46,7 +46,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend/app:/hiven
+      - ../../backend/app:/hiven
     depends_on:
       - postgres-db
 
