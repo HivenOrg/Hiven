@@ -60,7 +60,7 @@ func CreateTables(db *gorm.DB, stage string) error {
 	if stage == "dev" {
 		filePath = "./database/create_tables.sql"
 	} else if stage == "test" {
-		filePath = "../../database/create_tables.sql"
+		filePath = "../database/create_tables.sql"
 	} else {
 		return fmt.Errorf("failed to create tables: invalid stage")
 	}

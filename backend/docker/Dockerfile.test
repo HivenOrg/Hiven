@@ -18,4 +18,4 @@ ENV STAGE=test
 ENV JWT_SECRET_KEY=testsecretkey456
 ENV TOKEN_EXPIRES_IN_HOURS=1
 
-CMD ["go", "test", "./tests/..."]
+CMD ["go", "test", "-v", "./tests"]

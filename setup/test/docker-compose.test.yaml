@@ -32,7 +32,7 @@ services:
       - "3000:3000"
     volumes:
       - ../../backend/app:/hiven
-    command: go test -v ./tests/...
+    command: go test -v ./tests
     depends_on:
       - postgres-test-db
 
