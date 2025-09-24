@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -39,6 +40,9 @@ export default function LoginPage() {
           >
             Login
           </Button>
+          <Link href="/signup" className="text-sm text-muted-foreground hover:text-foreground text-center w-full block mt-2">
+            Don't have an account? Sign up
+          </Link>
         </form>
       </div>
     </div>
