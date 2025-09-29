@@ -1,9 +1,9 @@
+import { Eye } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Eye } from "lucide-react";
-import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -30,22 +30,28 @@ export default function SignupPage() {
         {/* Name fields - side by side */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="firstName" className="mb-2 block text-sm font-medium text-muted-foreground">
+            <Label
+              htmlFor="firstName"
+              className="mb-2 block text-sm font-medium text-muted-foreground"
+            >
               First name
             </Label>
-            <Input 
-              id="firstName" 
-              placeholder="Liam" 
+            <Input
+              id="firstName"
+              placeholder="Liam"
               className="bg-card border-none rounded-lg text-card-foreground"
             />
           </div>
           <div>
-            <Label htmlFor="lastName" className="mb-2 block text-sm font-medium text-muted-foreground">
+            <Label
+              htmlFor="lastName"
+              className="mb-2 block text-sm font-medium text-muted-foreground"
+            >
               Last name
             </Label>
-            <Input 
-              id="lastName" 
-              placeholder="Smith" 
+            <Input
+              id="lastName"
+              placeholder="Smith"
               className="bg-card border-none rounded-lg text-card-foreground"
             />
           </div>
@@ -53,40 +59,49 @@ export default function SignupPage() {
 
         {/* Phone field */}
         <div>
-          <Label htmlFor="phone" className="mb-2 block text-sm font-medium text-muted-foreground">
+          <Label
+            htmlFor="phone"
+            className="mb-2 block text-sm font-medium text-muted-foreground"
+          >
             Phone
           </Label>
-          <Input 
-            id="phone" 
+          <Input
+            id="phone"
             type="tel"
-            placeholder="(555) 555-5555" 
+            placeholder="(555) 555-5555"
             className="bg-card border-none rounded-lg text-card-foreground"
           />
         </div>
 
         {/* Email field */}
         <div>
-          <Label htmlFor="email" className="mb-2 block text-sm font-medium text-muted-foreground">
+          <Label
+            htmlFor="email"
+            className="mb-2 block text-sm font-medium text-muted-foreground"
+          >
             Email
           </Label>
-          <Input 
-            id="email" 
+          <Input
+            id="email"
             type="email"
-            placeholder="liam.smith@example.com" 
+            placeholder="liam.smith@example.com"
             className="bg-card border-none rounded-lg text-card-foreground"
           />
         </div>
 
         {/* Password field */}
         <div>
-          <Label htmlFor="password" className="mb-2 block text-sm font-medium text-muted-foreground">
+          <Label
+            htmlFor="password"
+            className="mb-2 block text-sm font-medium text-muted-foreground"
+          >
             Password
           </Label>
           <div className="relative">
-            <Input 
-              id="password" 
+            <Input
+              id="password"
               type="password"
-              placeholder="••••••••" 
+              placeholder="••••••••"
               className="bg-card border-none rounded-lg text-card-foreground pr-12"
             />
             <button
@@ -109,7 +124,10 @@ export default function SignupPage() {
           >
             Register
           </Button>
-          <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground text-center w-full block mt-2">
+          <Link
+            href="/login"
+            className="text-sm text-muted-foreground hover:text-foreground text-center w-full block mt-2"
+          >
             Already have an account? Log in
           </Link>
         </div>
