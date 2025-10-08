@@ -16,3 +16,10 @@ export const loginUserSchema = z.object({
 })
 
 export type LoginUserInput = z.infer<typeof loginUserSchema>
+
+export const authResponseSchema = z.object({
+    bearer_token: z.string(),
+    expires_in_seconds: z.number(),
+})
+
+export type AuthResponse = z.infer<typeof authResponseSchema>
