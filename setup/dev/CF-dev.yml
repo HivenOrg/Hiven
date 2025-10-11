@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to create Hiven Dev environment
+
+Parameters:
+  AvailabilityZone:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Description: "The Availability Zone in which to launch the RDS instance."
+
+  DBInstanceIdentifier:
+    Type: String
+    Description: Identifier for the RDS instance.
+
+  DBUsername:
+    Type: String
+    Description: Master username for the RDS instance.
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+    Description: Master password for the RDS instance.
+  
+  DBName:
+    Type: String
+    Description: Name of database.
+  
+  VPC:
+    Type: AWS::EC2::VPC::Id
+    Description: "The ID of the VPC where resources will be deployed."
+
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: "List of subnet IDs (comma-separated) within the selected VPC."
+
+Resources:
+  HivenDevDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow PostgreSQL (5432) inbound from anywhere, outbound all
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+  
+  HivenDevDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Subnets for Hiven Dev RDS"
+      SubnetIds: !Ref Subnets
+  
+  HivenRDSParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Family: postgres17
+      Description: "Force SSL connections for Hiven"
+      Parameters:
+        rds.force_ssl: "1"
+
+  HivenRDSInstance:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      DBInstanceIdentifier: !Ref DBInstanceIdentifier
+      DBName: !Ref DBName
+      Engine: postgres
+      EngineVersion: 17.4
+      DBInstanceClass: db.t3.micro
+      AllocatedStorage: 20
+      StorageType: gp3
+      PubliclyAccessible: true
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      MultiAZ: false
+      AutoMinorVersionUpgrade: true
+      DeletionProtection: false
+      BackupRetentionPeriod: 0
+      VPCSecurityGroups:
+        - !Ref HivenDevDBSecurityGroup
+      DBSubnetGroupName: !Ref HivenDevDBSubnetGroup
+      Port: 5432
+      EnableIAMDatabaseAuthentication: false
+      StorageEncrypted: true
+      KmsKeyId: alias/aws/rds
+      MonitoringInterval: 0
+      EnableCloudwatchLogsExports: []
+      DBParameterGroupName: !Ref HivenRDSParameterGroup
+      OptionGroupName: default:postgres-17
+      AvailabilityZone: !Ref AvailabilityZone
+
+Outputs:
+  RDSInstanceEndpoint:
+    Description: Endpoint address of the created RDS instance
+    Value: !GetAtt HivenRDSInstance.Endpoint.Address
+
+  RDSInstancePort:
+    Description: Database port
+    Value: !GetAtt HivenRDSInstance.Endpoint.Port
