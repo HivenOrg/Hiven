@@ -1,24 +1,27 @@
 # Hiven
-The Ultimate Roomate App
+The Ultimate Roommate App
 
 ## Project Setup
 
-> All environments use Docker and Make. No other dependencies are required.
+> All environments use Docker and AWS CLI. No other dependencies are required.
 
-### Development environment
+### Development/Testing environment
+
+**Prerequisites**
+- AWS account
+- AWS CLI (installed and configured)
+- Docker and Docker Compose
+- WSL (only on Windows)
+
 **Steps**:
-- `cd /setup/dev`
-- `make start` to start development environment
-- `make stop` to stop development environment
+- Change directory into `cd /setup/dev`
+- Run bash script
+  - On Linux and macOS run `./main.sh`
+  - On Windows you need WSL. Run `wsl ./main.sh`
 
 **Try the API**
 - Import `backend/postman-collection/Hiven-API.postman_collection.json` into Postman to test the API endpoints.
 - The collection uses the base URL: **http://localhost:3000** 
-
-### Testing environment
-**Steps**:
-- `cd /setup/test`
-- `make tests` will run tests in an isolated environment and output the results
 
 ## 🤝 Maintainers
 
