@@ -1,0 +1,35 @@
+services:
+  create-test-db:
+    image: postgres:17
+    environment:
+      DB_HOST: ${RDS_ENDPOINT}
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      TEST_DB_NAME: ${TEST_DB_NAME}
+    restart: "no"
+    volumes:
+      - ./test.sh:/test.sh
+    command: ["bash", "/test.sh"]
+
+  api-server:
+    container_name: api-server
+    build:
+      context: ../../backend
+      dockerfile: docker/Dockerfile.test
+    working_dir: /hiven
+    environment:
+      DB_HOST: ${RDS_ENDPOINT}
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${TEST_DB_NAME}
+      DB_PORT: ${RDS_PORT}
+      DB_SSLMODE: ${DB_SSL_MODE}
+      STAGE: test
+      JWT_SECRET_KEY: testsecretkey456
+      TOKEN_EXPIRES_IN_HOURS: 1
+    volumes:
+      - ../../backend/app:/hiven
+    command: go test -v ./tests
+    depends_on:
+      create-test-db:
+        condition: service_completed_successfully
