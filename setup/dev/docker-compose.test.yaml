@@ -27,8 +27,6 @@ services:
       STAGE: test
       JWT_SECRET_KEY: testsecretkey456
       TOKEN_EXPIRES_IN_HOURS: 1
-    ports:
-      - "3000:3000"
     volumes:
       - ../../backend/app:/hiven
     command: go test -v ./tests

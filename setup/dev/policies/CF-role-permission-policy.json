@@ -2,11 +2,12 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AllowEC2andRDSFullAccess",
+      "Sid": "AllowFullAccessToRequiredResources",
       "Effect": "Allow",
       "Action": [
         "ec2:*",
-        "rds:*"
+        "rds:*",
+        "s3:*"
       ],
       "Resource": "*"
     }

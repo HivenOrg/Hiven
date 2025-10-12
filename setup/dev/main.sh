@@ -122,10 +122,12 @@ setup() {
   echo "CF_ROLE_ARN=$CF_ROLE_ARN" >> .env
   
   echo "STACK_NAME=hiven-dev-stack" >> .env
+  echo "DEV_BUCKET_NAME=hiven-dev-$(date +%s)" >> .env
+  echo "TEST_BUCKET_NAME=hiven-test-$(date +%s)" >> .env
   echo "DB_INSTANCE_IDENTIFIER=hiven-dev-instance" >> .env
 	echo "DB_USERNAME=postgres" >> .env
 	echo "DB_PASSWORD=hiven-postgres-123" >> .env
-  echo "DB_NAME=hiven_dev_db" >> .env
+  echo "DEV_DB_NAME=hiven_dev_db" >> .env
   echo "TEST_DB_NAME=hiven_test_db" >> .env
 
   echo "Setup complete! Environment variables written to .env"
@@ -146,9 +148,11 @@ up() {
       VPC="$VPC_ID" \
       Subnets="$SUBNET_IDS" \
       DBInstanceIdentifier="$DB_INSTANCE_IDENTIFIER" \
-      DBName="$DB_NAME" \
+      DevDBName="$DEV_DB_NAME" \
       DBUsername="$DB_USERNAME" \
       DBPassword="$DB_PASSWORD" \
+      DevBucketName="$DEV_BUCKET_NAME" \
+      TestBucketName="$TEST_BUCKET_NAME" \
     --no-cli-pager
   
   RDS_ENDPOINT=$(aws cloudformation describe-stacks \
@@ -198,6 +202,9 @@ down() {
   echo "Removing deployed AWS resources..."
 
   load_env
+
+  aws s3 rm s3://$DEV_BUCKET_NAME --recursive --region "$REGION" || true
+  aws s3 rm s3://$TEST_BUCKET_NAME --recursive --region "$REGION" || true
 
   aws cloudformation delete-stack \
     --stack-name "$STACK_NAME" \
