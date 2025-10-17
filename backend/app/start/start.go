@@ -1,12 +1,14 @@
 package start
 
 import (
+	"context"
 	"log"
 
 	"github.com/HivenOrg/Hiven/config"
 	"github.com/HivenOrg/Hiven/database"
 	"github.com/HivenOrg/Hiven/middleware"
 	"github.com/HivenOrg/Hiven/routers/auth"
+	"github.com/HivenOrg/Hiven/storage"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
@@ -16,6 +18,8 @@ Loading environment variables and connecting to database is seperated from setti
 This is done to make automated testing possible
 */
 func Server() *fiber.App {
+
+	ctx := context.Background()
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -27,10 +31,15 @@ func Server() *fiber.App {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
 
-	return BuildApp(*cfg, db)
+	s3, err := storage.New(cfg.S3_BUCKET_NAME, cfg.AWS_REGION, cfg.AWS_ACCESS_KEY_ID, cfg.AWS_SECRET_ACCESS_KEY, cfg.STAGE, ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize storage: %v", err)
+	}
+
+	return BuildApp(*cfg, db, s3)
 }
 
-func BuildApp(cfg config.Config, db *gorm.DB) *fiber.App {
+func BuildApp(cfg config.Config, db *gorm.DB, s3 *storage.Storage) *fiber.App {
 
 	app := fiber.New()
 
