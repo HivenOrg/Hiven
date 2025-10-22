@@ -8,6 +8,7 @@ import (
 	"github.com/HivenOrg/Hiven/database"
 	"github.com/HivenOrg/Hiven/middleware"
 	"github.com/HivenOrg/Hiven/routers/auth"
+	"github.com/HivenOrg/Hiven/routers/hive"
 	"github.com/HivenOrg/Hiven/storage"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -60,6 +61,8 @@ func BuildApp(cfg config.Config, db *gorm.DB, s3 *storage.Storage) *fiber.App {
 	app.Get("/test/protected", func(c *fiber.Ctx) error {
 		return c.SendString("Token is valid")
 	})
+
+	hive.HiveRouter(app.Group("/hive"), db, s3)
 
 	return app
 }
