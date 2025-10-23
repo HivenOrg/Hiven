@@ -1,9 +1,8 @@
 'use client'
 
+import { Plus } from "lucide-react";
 import HiveCard from "@/components/app/hiveCard";
 import { Button } from "@/components/ui/button";
-import { Plus, ChevronRight } from "lucide-react";
-import Image from "next/image";
 
 // Mock data for hives - replace with actual API call later
 const hives = [
