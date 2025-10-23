@@ -9,6 +9,7 @@ const members = [
     name: "Rahul Sharma",
     email: "rahul.sharma@email.com",
     profilePicture: "https://placehold.co/100",
+    owner: true,
   },
   {
     id: 2,
@@ -38,7 +39,7 @@ export default function HivePage() {
       {/* Members List */}
       <div className="space-y-3">
         {members.map((member) => (
-          <MemberCard key={member.id} member={member} />
+          <MemberCard key={member.id} member={member} owner={member.owner} />
         ))}
       </div>
     </div>

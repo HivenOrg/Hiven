@@ -1,3 +1,5 @@
+import { Crown } from "lucide-react";
+
 interface MemberCardProps {
   member: {
     id: number;
@@ -5,13 +7,12 @@ interface MemberCardProps {
     email: string;
     profilePicture: string;
   };
+  owner?: boolean;
 }
 
-export default function MemberCard({ member }: MemberCardProps) {
+export default function MemberCard({ member, owner }: MemberCardProps) {
   return (
-    <div
-      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border transition-all hover:bg-card/80"
-    >
+    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border transition-all hover:bg-card/80">
       {/* Profile Picture */}
       <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted shrink-0">
         <img
@@ -27,8 +28,8 @@ export default function MemberCard({ member }: MemberCardProps) {
 
       {/* Member Info */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-base text-foreground truncate">
-          {member.name}
+        <h3 className="font-semibold flex items-center gap-2 text-base text-foreground truncate">
+          {member.name} {owner && <Crown className="h-4 w-4 text-primary" />}
         </h3>
         <p className="text-sm text-muted-foreground truncate">{member.email}</p>
       </div>
