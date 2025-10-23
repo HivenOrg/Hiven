@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface HiveCardProps {
   hive: {
@@ -12,8 +13,8 @@ interface HiveCardProps {
 
 export default function HiveCard({ hive }: HiveCardProps) {
   return (
-    <button
-      type="button"
+    <Link
+      href={`/app/${hive.id}`}
       className="w-full group relative overflow-hidden rounded-2xl bg-card border border-border p-4 flex items-center gap-4 transition-all hover:bg-card/80 hover:scale-[0.99] active:scale-[0.97]"
     >
       {/* Hive Image */}
@@ -41,6 +42,6 @@ export default function HiveCard({ hive }: HiveCardProps) {
 
       {/* Arrow Icon */}
       <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
-    </button>
+    </Link>
   );
 }
