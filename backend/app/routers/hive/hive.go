@@ -186,4 +186,90 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"my_hives": res})
 	})
+
+	router.Put("/edit", func(c *fiber.Ctx) error {
+
+		var reqBody editHive
+
+		// Parsing and Validating
+		err := utils.ParseAndValidate(c, &reqBody)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		}
+
+		// Fetching current user details
+		userID, ok := c.Locals("user_id").(uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		hiveIDs, ok := c.Locals("hive_ids").([]uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		// Checking if current user is authorized to perform this action
+		authorized, err := utils.IsActiveOwner(userID, hiveIDs, reqBody.HiveID, db)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		if !authorized {
+			return c.SendStatus(fiber.StatusForbidden)
+		}
+
+		// Updating database
+		err = db.Model(&database.Hive{}).
+			Where("id = ?", reqBody.HiveID).
+			Updates(database.Hive{
+				Name:    reqBody.Name,
+				Address: reqBody.Address,
+			}).Error
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.SendStatus(fiber.StatusOK)
+	})
+
+	router.Delete("/delete", func(c *fiber.Ctx) error {
+
+		// Fetching query parameter
+		hiveIDStr := c.Query("id")
+		if hiveIDStr == "" {
+			return fiber.NewError(fiber.StatusBadRequest, "query parameter 'id' missing")
+		}
+		rawHiveID, err := strconv.ParseUint(hiveIDStr, 10, 64)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, "query parameter 'id' invalid")
+		}
+		hiveID := uint(rawHiveID)
+
+		// Fetching current user details
+		currUserID, ok := c.Locals("user_id").(uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		currUserHiveIDs, ok := c.Locals("hive_ids").([]uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		// Checking if current user is authorized to perform this action
+		authorized, err := utils.IsActiveOwner(currUserID, currUserHiveIDs, hiveID, db)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		if !authorized {
+			return c.SendStatus(fiber.StatusForbidden)
+		}
+
+		// Delete hive
+		err = db.Where("id = ?", hiveID).Delete(&database.Hive{}).Error
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.SendStatus(fiber.StatusNoContent)
+	})
 }

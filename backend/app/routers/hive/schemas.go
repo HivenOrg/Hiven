@@ -23,3 +23,9 @@ type hiveResponse struct {
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
+
+type editHive struct {
+	HiveID  uint   `json:"hive_id" validate:"required,gt=0"`
+	Name    string `json:"name" validate:"required,min=1"`
+	Address string `json:"address" validate:"required,min=1"`
+}
