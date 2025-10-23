@@ -1,6 +1,13 @@
 "use client";
 
-import { Calendar, PartyPopper, Sparkles, Utensils, Wallet } from "lucide-react";
+import {
+  Calendar,
+  PartyPopper,
+  Sparkles,
+  Utensils,
+  Wallet,
+} from "lucide-react";
+import CalendarEventCard from "@/components/hive/CalendarEventCard";
 import { Button } from "@/components/ui/button";
 
 // Mock data for events - replace with actual API call later
@@ -50,26 +57,7 @@ export default function CalendarPage() {
       {/* Events List */}
       <div className="space-y-3">
         {events.map((event) => {
-          const Icon = event.icon;
-          return (
-            <div
-              key={event.id}
-              className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border"
-            >
-              {/* Icon */}
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                <Icon className="w-6 h-6 text-primary" />
-              </div>
-
-              {/* Event Info */}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-base text-foreground">
-                  {event.name}
-                </h3>
-                <p className="text-sm text-muted-foreground">{event.date}</p>
-              </div>
-            </div>
-          );
+          return <CalendarEventCard key={event.id} event={event} />;
         })}
       </div>
     </div>
