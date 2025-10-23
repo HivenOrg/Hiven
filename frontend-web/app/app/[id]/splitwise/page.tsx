@@ -127,6 +127,11 @@ export default function SplitwisePage() {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paidBy, setPaidBy] = useState("");
 
+  const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+  const [transactionAmount, setTransactionAmount] = useState("");
+  const [transactionMember, setTransactionMember] = useState("");
+  const [transactionType, setTransactionType] = useState("sending");
+
   const handleAddPayment = () => {
     // Implement add payment logic
     console.log("Adding payment:", {
@@ -141,7 +146,24 @@ export default function SplitwisePage() {
     setIsPaymentModalOpen(false);
   };
 
+  const handleAddTransaction = () => {
+    // Implement add transaction logic
+    console.log("Adding transaction:", {
+      amount: parseFloat(transactionAmount),
+      member: transactionMember,
+      type: transactionType,
+      from: transactionType === "sending" ? "You" : transactionMember,
+      to: transactionType === "sending" ? transactionMember : "You",
+    });
+    // Reset form
+    setTransactionAmount("");
+    setTransactionMember("");
+    setTransactionType("sending");
+    setIsTransactionModalOpen(false);
+  };
+
   const isPaymentFormValid = paymentTitle && paymentAmount && paidBy;
+  const isTransactionFormValid = transactionAmount && transactionMember;
 
   return (
     <div className="p-4 space-y-8">
@@ -178,7 +200,11 @@ export default function SplitwisePage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Transactions</h2>
-          <Button size="sm" variant="default">
+          <Button
+            size="sm"
+            variant="default"
+            onClick={() => setIsTransactionModalOpen(true)}
+          >
             Add Transaction
           </Button>
         </div>
@@ -256,6 +282,103 @@ export default function SplitwisePage() {
             </Button>
             <Button onClick={handleAddPayment} disabled={!isPaymentFormValid}>
               Add Payment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Transaction Modal */}
+      <Dialog
+        open={isTransactionModalOpen}
+        onOpenChange={setIsTransactionModalOpen}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Transaction</DialogTitle>
+            <DialogDescription>
+              Record a money transfer between you and another member to settle
+              debts.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            {/* Transaction Type */}
+            <div className="space-y-2">
+              <Label htmlFor="transaction-type">Transaction Type</Label>
+              <Select
+                value={transactionType}
+                onValueChange={setTransactionType}
+              >
+                <SelectTrigger
+                  id="transaction-type"
+                  className="bg-card border-border"
+                >
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sending">Sending Money</SelectItem>
+                  <SelectItem value="receiving">Receiving Money</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Member */}
+            <div className="space-y-2">
+              <Label htmlFor="transaction-member">
+                {transactionType === "sending" ? "Send To" : "Receive From"}
+              </Label>
+              <Select
+                value={transactionMember}
+                onValueChange={setTransactionMember}
+              >
+                <SelectTrigger
+                  id="transaction-member"
+                  className="bg-card border-border"
+                >
+                  <SelectValue placeholder="Select a member" />
+                </SelectTrigger>
+                <SelectContent>
+                  {members
+                    .filter((member) => member.name !== "You")
+                    .map((member) => (
+                      <SelectItem key={member.id} value={member.name}>
+                        {member.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Amount */}
+            <div className="space-y-2">
+              <Label htmlFor="transaction-amount">Amount</Label>
+              <Input
+                id="transaction-amount"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={transactionAmount}
+                onChange={(e) => setTransactionAmount(e.target.value)}
+                className="bg-card border-border"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setTransactionAmount("");
+                setTransactionMember("");
+                setTransactionType("sending");
+                setIsTransactionModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddTransaction}
+              disabled={!isTransactionFormValid}
+            >
+              Add Transaction
             </Button>
           </DialogFooter>
         </DialogContent>
