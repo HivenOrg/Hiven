@@ -123,6 +123,7 @@ const transactions = [
 
 export default function SplitwisePage() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [editingPayment, setEditingPayment] = useState<number | null>(null);
   const [paymentTitle, setPaymentTitle] = useState("");
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paidBy, setPaidBy] = useState("");
@@ -133,17 +134,41 @@ export default function SplitwisePage() {
   const [transactionType, setTransactionType] = useState("sending");
 
   const handleAddPayment = () => {
-    // Implement add payment logic
-    console.log("Adding payment:", {
-      title: paymentTitle,
-      amount: parseFloat(paymentAmount),
-      paidBy,
-    });
+    if (editingPayment !== null) {
+      // Edit existing payment
+      console.log("Editing payment:", {
+        id: editingPayment,
+        title: paymentTitle,
+        amount: parseFloat(paymentAmount),
+        paidBy,
+      });
+    } else {
+      // Add new payment
+      console.log("Adding payment:", {
+        title: paymentTitle,
+        amount: parseFloat(paymentAmount),
+        paidBy,
+      });
+    }
     // Reset form
     setPaymentTitle("");
     setPaymentAmount("");
     setPaidBy("");
+    setEditingPayment(null);
     setIsPaymentModalOpen(false);
+  };
+
+  const handleEditPayment = (payment: {
+    id: number;
+    title: string;
+    paidBy: string;
+    amount: number;
+  }) => {
+    setEditingPayment(payment.id);
+    setPaymentTitle(payment.title);
+    setPaymentAmount(payment.amount.toString());
+    setPaidBy(payment.paidBy);
+    setIsPaymentModalOpen(true);
   };
 
   const handleAddTransaction = () => {
@@ -181,7 +206,13 @@ export default function SplitwisePage() {
         </div>
         <div className="space-y-3">
           {payments.map((payment) => {
-            return <PaymentCard key={payment.id} payment={payment} />;
+            return (
+              <PaymentCard
+                key={payment.id}
+                payment={payment}
+                onEdit={handleEditPayment}
+              />
+            );
           })}
         </div>
       </section>
@@ -215,13 +246,17 @@ export default function SplitwisePage() {
         </div>
       </section>
 
-      {/* Add Payment Modal */}
+      {/* Add/Edit Payment Modal */}
       <Dialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Payment</DialogTitle>
+            <DialogTitle>
+              {editingPayment !== null ? "Edit Payment" : "Add Payment"}
+            </DialogTitle>
             <DialogDescription>
-              Record a payment made by a member of your hive.
+              {editingPayment !== null
+                ? "Update the payment details."
+                : "Record a payment made by a member of your hive."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -275,13 +310,14 @@ export default function SplitwisePage() {
                 setPaymentTitle("");
                 setPaymentAmount("");
                 setPaidBy("");
+                setEditingPayment(null);
                 setIsPaymentModalOpen(false);
               }}
             >
               Cancel
             </Button>
             <Button onClick={handleAddPayment} disabled={!isPaymentFormValid}>
-              Add Payment
+              {editingPayment !== null ? "Save Changes" : "Add Payment"}
             </Button>
           </DialogFooter>
         </DialogContent>
