@@ -1,5 +1,5 @@
 import axios, { type Axios } from "axios";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 import { Auth } from "./auth";
 
 class Api {
@@ -18,6 +18,7 @@ class Api {
 
     ax.interceptors.request.use(async (config) => {
       if (typeof window === "undefined") {
+        const { cookies } = await import("next/headers");
         const cookieStore = await cookies();
         const token = cookieStore.get("token");
         if (token) {
@@ -25,7 +26,7 @@ class Api {
         }
         return config;
       }
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (token) {
         config.headers.Authorization = `${token}`;
       }

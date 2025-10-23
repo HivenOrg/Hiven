@@ -5,6 +5,8 @@ import type {
   LoginUserInput,
   RegisterUserInput,
 } from "@/lib/validators/auth.schema";
+import api from "@/components/api";
+import Cookies from "js-cookie";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -42,7 +44,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   });
 
   async function login(data: LoginUserInput): Promise<void> {
-    console.log(`Logging in with ${data.email} and ${data.password}`);
+    const res = await api.auth.login(data)
+    Cookies.set('token', res.bearer_token)
   }
 
   async function logout(): Promise<void> {
@@ -50,7 +53,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function register(data: RegisterUserInput): Promise<void> {
-    console.log(`Registering with ${data.email} and ${data.password}`);
+    const res = await api.auth.register(data)
+    Cookies.set('token', res.bearer_token)
   }
 
   useEffect(() => {

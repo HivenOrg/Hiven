@@ -1,9 +1,16 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/components/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  type RegisterUserInput,
+  registerUserSchema,
+} from "@/lib/validators/auth.schema";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -11,6 +18,18 @@ export const metadata: Metadata = {
 };
 
 export default function SignupPage() {
+  const auth = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterUserInput>({
+    resolver: zodResolver(registerUserSchema),
+  });
+
+  function onSubmit(data: RegisterUserInput) {
+    auth.register(data);
+  }
   return (
     <div className="flex min-h-screen flex-col bg-background p-4 pt-10">
       {/* Header with back button */}
@@ -26,7 +45,7 @@ export default function SignupPage() {
       </div>
 
       {/* Form */}
-      <form className="flex-1 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 space-y-6">
         {/* Name fields - side by side */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -40,7 +59,13 @@ export default function SignupPage() {
               id="firstName"
               placeholder="Liam"
               className="bg-card border-none rounded-lg text-card-foreground"
+              {...register("firstname")}
             />
+            {errors.firstname && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.firstname.message}
+              </p>
+            )}
           </div>
           <div>
             <Label
@@ -53,7 +78,13 @@ export default function SignupPage() {
               id="lastName"
               placeholder="Smith"
               className="bg-card border-none rounded-lg text-card-foreground"
+              {...register("lastname")}
             />
+            {errors.lastname && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.lastname.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -70,7 +101,13 @@ export default function SignupPage() {
             type="tel"
             placeholder="(555) 555-5555"
             className="bg-card border-none rounded-lg text-card-foreground"
+            {...register("phone_number")}
           />
+          {errors.phone_number && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.phone_number.message}
+            </p>
+          )}
         </div>
 
         {/* Email field */}
@@ -86,7 +123,13 @@ export default function SignupPage() {
             type="email"
             placeholder="liam.smith@example.com"
             className="bg-card border-none rounded-lg text-card-foreground"
+            {...register("email")}
           />
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         {/* Password field */}
@@ -101,8 +144,9 @@ export default function SignupPage() {
             <Input
               id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="•••••"
               className="bg-card border-none rounded-lg text-card-foreground pr-12"
+              {...register("password")}
             />
             <button
               type="button"
@@ -111,6 +155,11 @@ export default function SignupPage() {
               <Eye size={20} />
             </button>
           </div>
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         {/* Spacer to push button to bottom */}
