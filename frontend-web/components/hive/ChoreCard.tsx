@@ -18,22 +18,33 @@ interface ChoreCardProps {
       profilePicture: string;
     };
   };
+  onEdit?: (chore: ChoreCardProps["chore"]) => void;
+  onDelete?: (choreId: number) => void;
+  onMarkComplete?: (choreId: number) => void;
 }
 
-export default function ChoreCard({ chore }: ChoreCardProps) {
-  const handleMarkComplete = (choreId: number) => {
-    console.log("Mark complete:", choreId);
-    // Implement mark complete logic
+export default function ChoreCard({
+  chore,
+  onEdit,
+  onDelete,
+  onMarkComplete,
+}: ChoreCardProps) {
+  const handleMarkComplete = () => {
+    if (onMarkComplete) {
+      onMarkComplete(chore.id);
+    }
   };
 
-  const handleReassign = (choreId: number) => {
-    console.log("Reassign:", choreId);
-    // Implement reassign logic
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(chore);
+    }
   };
 
-  const handleDelete = (choreId: number) => {
-    console.log("Delete:", choreId);
-    // Implement delete logic
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(chore.id);
+    }
   };
 
   return (
@@ -72,14 +83,14 @@ export default function ChoreCard({ chore }: ChoreCardProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem onClick={() => handleMarkComplete(chore.id)}>
+          <DropdownMenuItem onClick={handleMarkComplete}>
             Mark as Complete
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleReassign(chore.id)}>
-            Reassign
+          <DropdownMenuItem onClick={handleEdit}>
+            Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => handleDelete(chore.id)}
+            onClick={handleDelete}
             className="text-destructive focus:text-destructive"
           >
             Delete Chore

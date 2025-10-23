@@ -11,6 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -75,22 +85,74 @@ const chores = [
 
 export default function ChoresPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [editingChore, setEditingChore] = useState<typeof chores[0] | null>(null);
+  const [choreToDelete, setChoreToDelete] = useState<number | null>(null);
   const [choreName, setChoreName] = useState("");
   const [assignedMember, setAssignedMember] = useState("");
   const [dueDate, setDueDate] = useState("");
 
-  const handleAddChore = () => {
-    // Implement add chore logic
-    console.log("Adding chore:", {
-      name: choreName,
-      assignedMember,
-      dueDate,
-    });
+  const handleOpenAddModal = () => {
+    setEditingChore(null);
+    setChoreName("");
+    setAssignedMember("");
+    setDueDate("");
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (chore: typeof chores[0]) => {
+    setEditingChore(chore);
+    setChoreName(chore.name);
+    setAssignedMember(chore.assignee.id.toString());
+    // Calculate due date from dueInDays (mock calculation)
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + chore.dueInDays);
+    setDueDate(futureDate.toISOString().split("T")[0]);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveChore = () => {
+    if (editingChore) {
+      // Implement edit chore logic
+      console.log("Editing chore:", {
+        id: editingChore.id,
+        name: choreName,
+        assignedMember,
+        dueDate,
+      });
+    } else {
+      // Implement add chore logic
+      console.log("Adding chore:", {
+        name: choreName,
+        assignedMember,
+        dueDate,
+      });
+    }
     // Reset form
     setChoreName("");
     setAssignedMember("");
     setDueDate("");
+    setEditingChore(null);
     setIsModalOpen(false);
+  };
+
+  const handleDeleteClick = (choreId: number) => {
+    setChoreToDelete(choreId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (choreToDelete) {
+      // Implement delete chore logic
+      console.log("Deleting chore:", choreToDelete);
+      setChoreToDelete(null);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
+  const handleMarkComplete = (choreId: number) => {
+    // Implement mark complete logic
+    console.log("Marking chore as complete:", choreId);
   };
 
   const isFormValid = choreName && assignedMember && dueDate;
@@ -99,7 +161,7 @@ export default function ChoresPage() {
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Chores</h2>
-        <Button size="sm" variant="default" onClick={() => setIsModalOpen(true)}>
+        <Button size="sm" variant="default" onClick={handleOpenAddModal}>
           Add Chore
         </Button>
       </div>
@@ -107,17 +169,25 @@ export default function ChoresPage() {
       {/* Chores List */}
       <div className="space-y-3">
         {chores.map((chore) => (
-          <ChoreCard key={chore.id} chore={chore} />
+          <ChoreCard
+            key={chore.id}
+            chore={chore}
+            onEdit={handleOpenEditModal}
+            onDelete={handleDeleteClick}
+            onMarkComplete={handleMarkComplete}
+          />
         ))}
       </div>
 
-      {/* Add Chore Modal */}
+      {/* Add/Edit Chore Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Chore</DialogTitle>
+            <DialogTitle>{editingChore ? "Edit Chore" : "Add Chore"}</DialogTitle>
             <DialogDescription>
-              Create a new chore and assign it to a member.
+              {editingChore
+                ? "Update the chore details below."
+                : "Create a new chore and assign it to a member."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -169,17 +239,42 @@ export default function ChoresPage() {
                 setChoreName("");
                 setAssignedMember("");
                 setDueDate("");
+                setEditingChore(null);
                 setIsModalOpen(false);
               }}
             >
               Cancel
             </Button>
-            <Button onClick={handleAddChore} disabled={!isFormValid}>
-              Add Chore
+            <Button onClick={handleSaveChore} disabled={!isFormValid}>
+              {editingChore ? "Save Changes" : "Add Chore"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Chore</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this chore? This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
