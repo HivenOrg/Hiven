@@ -1,3 +1,12 @@
+import { MoreVertical } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+
 interface PaymentCardProps {
   payment: {
     id: number;
@@ -7,10 +16,29 @@ interface PaymentCardProps {
     icon: React.ElementType;
     iconBg: string;
   };
+  onEdit?: (payment: PaymentCardProps["payment"]) => void;
+  onDelete?: (paymentId: number) => void;
 }
 
-export default function PaymentCard({ payment }: PaymentCardProps) {
+export default function PaymentCard({
+  payment,
+  onEdit,
+  onDelete,
+}: PaymentCardProps) {
   const Icon = payment.icon;
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(payment);
+    }
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(payment.id);
+    }
+  };
+
   return (
     <div
       key={payment.id}
@@ -35,6 +63,24 @@ export default function PaymentCard({ payment }: PaymentCardProps) {
       <div className="text-lg font-semibold text-foreground">
         ${payment.amount.toFixed(2)}
       </div>
+
+      {/* Actions Menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon" variant="ghost" className="shrink-0 h-8 w-8">
+            <MoreVertical className="w-5 h-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleDelete}
+            className="text-destructive focus:text-destructive"
+          >
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
