@@ -6,6 +6,7 @@ import (
 	"io"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/HivenOrg/Hiven/database"
@@ -22,7 +23,7 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 		ctx, cancel := context.WithTimeout(c.Context(), 10*time.Second)
 		defer cancel()
 
-		var reqBody CreateHiveSchema
+		var reqBody createHiveSchema
 
 		// Parsing and Validating
 		err := utils.ParseAndValidate(c, &reqBody)
@@ -74,7 +75,7 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 		ctx, cancel := context.WithTimeout(c.Context(), 10*time.Second)
 		defer cancel()
 
-		var reqBody UploadHiveDisplayImage
+		var reqBody uploadHiveDisplayImage
 
 		// Parse hive_id from form
 		hiveIDStr := c.FormValue("hive_id")
@@ -122,7 +123,7 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 		}
 
 		// Uploading to S3
-		imgKey := fmt.Sprintf("hive/%d/display-image", reqBody.HiveID)
+		imgKey := fmt.Sprintf("hives/%d/display-image", reqBody.HiveID)
 		err = s3.Upload(ctx, imgKey, mimeType, data)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
@@ -135,5 +136,54 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 		}
 
 		return c.SendStatus(fiber.StatusOK)
+	})
+
+	router.Get("/my-hives", func(c *fiber.Ctx) error {
+
+		ctx, cancel := context.WithTimeout(c.Context(), 10*time.Second)
+		defer cancel()
+
+		// Fetching HiveIDs
+		hiveIDs, ok := c.Locals("hive_ids").([]uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		if len(hiveIDs) == 0 {
+			return c.Status(fiber.StatusOK).JSON(fiber.Map{"my_hives": []hiveResponse{}})
+		}
+
+		// Fetching hives from database
+		var hives []database.Hive
+		err := db.Where("id IN ?", hiveIDs).Find(&hives).Error
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		// Parsing response
+		var res []hiveResponse
+
+		for _, h := range hives {
+
+			// Generating presigned urlS
+			url := ""
+			if h.DisplayImgKey != nil && strings.TrimSpace(*h.DisplayImgKey) != "" {
+				url, err = s3.DownloadPresignedURL(ctx, *h.DisplayImgKey, 10)
+				if err != nil {
+					return c.SendStatus(fiber.StatusInternalServerError)
+				}
+			}
+
+			res = append(res, hiveResponse{
+				ID:            h.ID,
+				Name:          h.Name,
+				Address:       h.Address,
+				DisplayImgURL: url,
+				CreatedAt:     h.CreatedAt,
+				UpdatedAt:     h.UpdatedAt,
+			})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"my_hives": res})
 	})
 }

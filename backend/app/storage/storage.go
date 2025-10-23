@@ -7,6 +7,7 @@ import (
 	"mime"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -70,4 +71,27 @@ func (storage Storage) Upload(ctx context.Context, key, mimeType string, data []
 		return fmt.Errorf("failed to upload to S3: %w", err)
 	}
 	return nil
+}
+
+func (storage Storage) DownloadPresignedURL(ctx context.Context, key string, expiresInMinutes int) (string, error) {
+
+	if strings.TrimSpace(key) == "" {
+		return "", fmt.Errorf("invalid S3 key")
+	}
+
+	psClient := s3.NewPresignClient(storage.client)
+
+	req, err := psClient.PresignGetObject(
+		ctx,
+		&s3.GetObjectInput{
+			Bucket: aws.String(storage.bucketName),
+			Key:    aws.String(key),
+		},
+		s3.WithPresignExpires(time.Duration(expiresInMinutes)*time.Minute),
+	)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate presigned URL: %w", err)
+	}
+
+	return req.URL, nil
 }
