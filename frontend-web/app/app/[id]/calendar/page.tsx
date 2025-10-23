@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Calendar,
   PartyPopper,
@@ -9,6 +10,16 @@ import {
 } from "lucide-react";
 import CalendarEventCard from "@/components/hive/CalendarEventCard";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Mock data for events - replace with actual API call later
 const events = [
@@ -45,11 +56,29 @@ const events = [
 ];
 
 export default function CalendarPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState("");
+
+  const handleAddEvent = () => {
+    // Implement add event logic
+    console.log("Adding event:", {
+      name: eventName,
+      date: eventDate,
+    });
+    // Reset form
+    setEventName("");
+    setEventDate("");
+    setIsModalOpen(false);
+  };
+
+  const isFormValid = eventName && eventDate;
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Calendar</h2>
-        <Button size="sm" variant="default">
+        <Button size="sm" variant="default" onClick={() => setIsModalOpen(true)}>
           Add Event
         </Button>
       </div>
@@ -60,6 +89,58 @@ export default function CalendarPage() {
           return <CalendarEventCard key={event.id} event={event} />;
         })}
       </div>
+
+      {/* Add Event Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Event</DialogTitle>
+            <DialogDescription>
+              Create a new event for your hive calendar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            {/* Event Name */}
+            <div className="space-y-2">
+              <Label htmlFor="event-name">Event Name</Label>
+              <Input
+                id="event-name"
+                placeholder="e.g., Movie Night"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+                className="bg-card border-border"
+              />
+            </div>
+
+            {/* Event Date */}
+            <div className="space-y-2">
+              <Label htmlFor="event-date">Date</Label>
+              <Input
+                id="event-date"
+                type="date"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+                className="bg-card border-border"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setEventName("");
+                setEventDate("");
+                setIsModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleAddEvent} disabled={!isFormValid}>
+              Add Event
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
