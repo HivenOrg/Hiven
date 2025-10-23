@@ -1,6 +1,9 @@
 "use client";
 
-import { ArrowRight, Home, Lightbulb, Pizza, ShoppingBag } from "lucide-react";
+import { Home, Lightbulb, Pizza, ShoppingBag } from "lucide-react";
+import OwedBalanceCard from "@/components/hive/OwedBalanceCard";
+import PaymentCard from "@/components/hive/PaymentCard";
+import TransactionCard from "@/components/hive/TransactionCard";
 import { Button } from "@/components/ui/button";
 
 // Mock data - replace with actual API call later
@@ -104,35 +107,7 @@ export default function SplitwisePage() {
         </div>
         <div className="space-y-3">
           {payments.map((payment) => {
-            const Icon = payment.icon;
-            return (
-              <div
-                key={payment.id}
-                className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border"
-              >
-                {/* Icon */}
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${payment.iconBg}`}
-                >
-                  <Icon className="w-6 h-6 text-foreground" />
-                </div>
-
-                {/* Payment Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-base text-foreground">
-                    {payment.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {payment.paidBy} paid
-                  </p>
-                </div>
-
-                {/* Amount */}
-                <div className="text-lg font-semibold text-foreground">
-                  ${payment.amount.toFixed(2)}
-                </div>
-              </div>
-            );
+            return <PaymentCard key={payment.id} payment={payment} />;
           })}
         </div>
       </section>
@@ -142,44 +117,7 @@ export default function SplitwisePage() {
         <h2 className="text-xl font-semibold mb-4">Who Owes Who</h2>
         <div className="space-y-3">
           {owedBalances.map((balance) => (
-            <div
-              key={balance.id}
-              className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border"
-            >
-              {/* Profile Picture */}
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted shrink-0">
-                <img
-                  src={balance.person.profilePicture}
-                  alt={balance.person.name}
-                  className="object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10" />
-              </div>
-
-              {/* Balance Info */}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-base text-foreground">
-                  {balance.owesYou
-                    ? `${balance.person.name} owes you`
-                    : `You owe ${balance.person.name}`}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {balance.reason}
-                </p>
-              </div>
-
-              {/* Amount */}
-              <div
-                className={`text-lg font-semibold ${
-                  balance.owesYou ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {balance.owesYou ? "+" : "-"}${balance.amount.toFixed(2)}
-              </div>
-            </div>
+            <OwedBalanceCard key={balance.id} balance={balance} />
           ))}
         </div>
       </section>
@@ -189,54 +127,7 @@ export default function SplitwisePage() {
         <h2 className="text-xl font-semibold mb-4">Transactions</h2>
         <div className="space-y-3">
           {transactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="flex items-center gap-3 p-4 rounded-xl bg-card border border-border"
-            >
-              {/* From Profile Picture */}
-              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-muted shrink-0">
-                <img
-                  src={transaction.from.profilePicture}
-                  alt={transaction.from.name}
-                  className="object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10" />
-              </div>
-
-              {/* Arrow */}
-              <ArrowRight className="w-5 h-5 text-muted-foreground shrink-0" />
-
-              {/* To Profile Picture */}
-              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-muted shrink-0">
-                <img
-                  src={transaction.to.profilePicture}
-                  alt={transaction.to.name}
-                  className="object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10" />
-              </div>
-
-              {/* Transaction Info */}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-foreground">
-                  {transaction.from.name} → {transaction.to.name}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {transaction.date}
-                </p>
-              </div>
-
-              {/* Amount */}
-              <div className="text-base font-semibold text-foreground">
-                ${transaction.amount.toFixed(2)}
-              </div>
-            </div>
+            <TransactionCard key={transaction.id} transaction={transaction} />
           ))}
         </div>
       </section>
