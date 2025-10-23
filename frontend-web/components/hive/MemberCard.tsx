@@ -1,4 +1,5 @@
-import { Crown } from "lucide-react";
+import { Crown, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface MemberCardProps {
   member: {
@@ -8,9 +9,16 @@ interface MemberCardProps {
     profilePicture: string;
   };
   owner?: boolean;
+  onRemove?: (memberId: number) => void;
+  canRemove?: boolean;
 }
 
-export default function MemberCard({ member, owner }: MemberCardProps) {
+export default function MemberCard({
+  member,
+  owner,
+  onRemove,
+  canRemove,
+}: MemberCardProps) {
   return (
     <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border transition-all hover:bg-card/80">
       {/* Profile Picture */}
@@ -33,6 +41,18 @@ export default function MemberCard({ member, owner }: MemberCardProps) {
         </h3>
         <p className="text-sm text-muted-foreground truncate">{member.email}</p>
       </div>
+
+      {/* Remove Button */}
+      {canRemove && onRemove && !owner && (
+        <Button
+          size="icon"
+          variant="ghost"
+          className="shrink-0 h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+          onClick={() => onRemove(member.id)}
+        >
+          <X className="w-5 h-5" />
+        </Button>
+      )}
     </div>
   );
 }

@@ -12,6 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -47,12 +57,39 @@ const members = [
 export default function HivePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberEmail, setMemberEmail] = useState("");
+  const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
+  const [memberToRemove, setMemberToRemove] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const handleAddMember = () => {
     // Implement add member logic
     console.log("Adding member with email:", memberEmail);
     setMemberEmail("");
     setIsModalOpen(false);
+  };
+
+  const handleRemoveClick = (memberId: number) => {
+    const member = members.find((m) => m.id === memberId);
+    if (member) {
+      setMemberToRemove({ id: member.id, name: member.name });
+      setIsRemoveDialogOpen(true);
+    }
+  };
+
+  const handleConfirmRemove = () => {
+    if (memberToRemove) {
+      // Implement remove member logic
+      console.log("Removing member with id:", memberToRemove.id);
+      setMemberToRemove(null);
+      setIsRemoveDialogOpen(false);
+    }
+  };
+
+  const handleCancelRemove = () => {
+    setMemberToRemove(null);
+    setIsRemoveDialogOpen(false);
   };
 
   return (
@@ -62,7 +99,13 @@ export default function HivePage() {
       {/* Members List */}
       <div className="space-y-3">
         {members.map((member) => (
-          <MemberCard key={member.id} member={member} owner={member.owner} />
+          <MemberCard
+            key={member.id}
+            member={member}
+            owner={member.owner}
+            onRemove={handleRemoveClick}
+            canRemove={true}
+          />
         ))}
       </div>
 
@@ -114,6 +157,33 @@ export default function HivePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Remove Member Confirmation Dialog */}
+      <AlertDialog open={isRemoveDialogOpen} onOpenChange={setIsRemoveDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Member</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove{" "}
+              <span className="font-semibold text-foreground">
+                {memberToRemove?.name}
+              </span>{" "}
+              from this hive? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelRemove}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmRemove}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
