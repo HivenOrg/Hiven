@@ -1,6 +1,6 @@
 package auth
 
-type RegistrationRequestSchema struct {
+type registrationRequestSchema struct {
 	Email       string `json:"email" validate:"required,email"`
 	Password    string `json:"password" validate:"required,min=6"`
 	FirstName   string `json:"firstname" validate:"required,min=1"`
@@ -8,7 +8,7 @@ type RegistrationRequestSchema struct {
 	PhoneNumber string `json:"phone_number" validate:"required,e164"` // international telephone numbering standard
 }
 
-type LoginRequestSchema struct {
+type loginRequestSchema struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6"`
 }
