@@ -1,6 +1,19 @@
 "use client";
 
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import MemberCard from "@/components/hive/MemberCard";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Mock data for members - replace with actual API call later
 const members = [
@@ -32,8 +45,18 @@ const members = [
 ];
 
 export default function HivePage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memberEmail, setMemberEmail] = useState("");
+
+  const handleAddMember = () => {
+    // Implement add member logic
+    console.log("Adding member with email:", memberEmail);
+    setMemberEmail("");
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 pb-24">
       {/* <h2 className="text-xl font-semibold mb-4">Members</h2> */}
 
       {/* Members List */}
@@ -42,6 +65,55 @@ export default function HivePage() {
           <MemberCard key={member.id} member={member} owner={member.owner} />
         ))}
       </div>
+
+      {/* Floating Action Button */}
+      <Button
+        size="icon"
+        className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <Plus className="h-6 w-6" />
+      </Button>
+
+      {/* Add Member Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Member</DialogTitle>
+            <DialogDescription>
+              Enter the email address of the person you want to add to this
+              hive.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="member@email.com"
+                value={memberEmail}
+                onChange={(e) => setMemberEmail(e.target.value)}
+                className="bg-card border-border"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setMemberEmail("");
+                setIsModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleAddMember} disabled={!memberEmail}>
+              Add Member
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
