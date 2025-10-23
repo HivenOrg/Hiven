@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react";
 import HiveCard from "@/components/app/hiveCard";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // Mock data for hives - replace with actual API call later
 const hives = [
@@ -27,7 +28,7 @@ export default function AppPage() {
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Profile Picture */}
-          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-muted">
+          <Link href={"/profile"} className="relative w-10 h-10 rounded-full overflow-hidden bg-muted">
             <img
               src="https://placehold.co/100" // Replace with actual profile image
               alt="Profile"
@@ -38,7 +39,7 @@ export default function AppPage() {
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-primary/20" />
-          </div>
+          </Link>
 
           {/* Title */}
           <h1 className="text-lg font-semibold">My Hives</h1>
