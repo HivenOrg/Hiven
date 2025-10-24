@@ -1,6 +1,7 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/components/contexts/AuthContext";
@@ -11,11 +12,6 @@ import {
   type RegisterUserInput,
   registerUserSchema,
 } from "@/lib/validators/auth.schema";
-
-export const metadata: Metadata = {
-  title: "Sign Up",
-  description: "Create your account",
-};
 
 export default function SignupPage() {
   const auth = useAuth();
