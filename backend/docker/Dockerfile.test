@@ -7,15 +7,18 @@ RUN go mod download
 
 COPY ../app ./
 
-# Environment variables hardcoded for test
-ENV DB_HOST=postgres-test-db
-ENV DB_USER=postgres
-ENV DB_PASSWORD=postgres
-ENV DB_NAME=HivenTestDB
-ENV DB_PORT=5432
-ENV DB_SSLMODE=disable
-ENV STAGE=test
-ENV JWT_SECRET_KEY=testsecretkey456
-ENV TOKEN_EXPIRES_IN_HOURS=1
+ENV STAGE \
+    AWS_REGION \
+    AWS_ACCESS_KEY_ID \
+    AWS_SECRET_ACCESS_KEY \
+    S3_BUCKET_NAME \
+    DB_HOST \
+    DB_USER \
+    DB_PASSWORD \
+    DB_NAME \
+    DB_PORT \
+    DB_SSLMODE \
+    JWT_SECRET_KEY \
+    TOKEN_EXPIRES_IN_HOURS
 
 CMD ["go", "test", "-v", "./tests"]

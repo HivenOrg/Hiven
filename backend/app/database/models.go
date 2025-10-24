@@ -10,8 +10,8 @@ type User struct {
 	LastName      string
 	PhoneNumber   string // store in E.164 format
 	DisplayImgKey *string
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
+	CreatedAt     time.Time `gorm:"autoCreateTime"`
+	UpdatedAt     time.Time `gorm:"autoUpdateTime"`
 }
 
 type Hive struct {
@@ -19,8 +19,8 @@ type Hive struct {
 	Name          string
 	Address       string
 	DisplayImgKey *string
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
+	CreatedAt     time.Time `gorm:"autoCreateTime"`
+	UpdatedAt     time.Time `gorm:"autoUpdateTime"`
 }
 
 type Member struct {
@@ -28,5 +28,5 @@ type Member struct {
 	UserID   uint `gorm:"primaryKey"`
 	Status   string
 	Role     string
-	JoinedAt time.Time
+	JoinedAt time.Time `gorm:"autoCreateTime"`
 }
