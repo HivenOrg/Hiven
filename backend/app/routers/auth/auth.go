@@ -12,7 +12,7 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg config.Config) {
 
 	router.Post("/register", func(c *fiber.Ctx) error {
 
-		var reqBody RegistrationRequestSchema
+		var reqBody registrationRequestSchema
 
 		// Parsing and Validating
 		err := utils.ParseAndValidate(c, &reqBody)
@@ -72,7 +72,7 @@ func AuthRouter(router fiber.Router, db *gorm.DB, cfg config.Config) {
 
 	router.Post("/login", func(c *fiber.Ctx) error {
 
-		var reqBody LoginRequestSchema
+		var reqBody loginRequestSchema
 
 		// Parsing and Validating
 		err := utils.ParseAndValidate(c, &reqBody)

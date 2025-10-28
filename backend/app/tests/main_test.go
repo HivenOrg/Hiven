@@ -19,6 +19,7 @@ type payload map[string]any
 
 var cfg config.Config
 var testDB *gorm.DB
+var testStorage *storage.Storage
 var testApp *fiber.App
 
 func TestMain(m *testing.M) {
@@ -40,12 +41,12 @@ func TestMain(m *testing.M) {
 		log.Fatalf("failed to connect to test DB: %s", err.Error())
 	}
 
-	s3, err := storage.New(cfg.S3_BUCKET_NAME, cfg.AWS_REGION, cfg.AWS_ACCESS_KEY_ID, cfg.AWS_SECRET_ACCESS_KEY, cfg.STAGE, ctx)
+	testStorage, err = storage.New(cfg.S3_BUCKET_NAME, cfg.AWS_REGION, cfg.AWS_ACCESS_KEY_ID, cfg.AWS_SECRET_ACCESS_KEY, cfg.STAGE, ctx)
 	if err != nil {
 		log.Fatalf("failed to initialize storage: %v", err)
 	}
 
-	testApp = start.BuildApp(cfg, testDB, s3)
+	testApp = start.BuildApp(cfg, testDB, testStorage)
 
 	code := m.Run()
 	os.Exit(code)

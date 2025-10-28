@@ -54,7 +54,7 @@ func TestRegisterInvalidRequestBody(t *testing.T) {
 			testApp,
 			"POST",
 			"/auth/register",
-			headers{"Content-Type": "application/json"},
+			nil,
 			reqBody,
 		)
 
@@ -82,7 +82,7 @@ func TestRegisterEmailAlreadyInUse(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/register",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":        dummyUser.Email,
 			"password":     "shadowhunter123",
@@ -115,7 +115,7 @@ func TestRegisterPhoneNumberAlreadyInUse(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/register",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":        "harry.hunter@test.com",
 			"password":     "shadowhunter123",
@@ -143,7 +143,7 @@ func TestRegistration(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/register",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":        "harry.hunter@test.com",
 			"password":     "shadowhunter123",

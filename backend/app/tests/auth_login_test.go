@@ -37,7 +37,7 @@ func TestLoginInvalidRequestBody(t *testing.T) {
 			testApp,
 			"POST",
 			"/auth/login",
-			headers{"Content-Type": "application/json"},
+			nil,
 			reqBody,
 		)
 
@@ -60,7 +60,7 @@ func TestLoginEmailDoesNotExist(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/login",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":    "harry.hunter@test.com",
 			"password": "shadowhunter123",
@@ -90,7 +90,7 @@ func TestLoginIncorrectPassword(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/login",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":    dummyUser.Email,
 			"password": "wrong password",
@@ -120,7 +120,7 @@ func TestLogin(t *testing.T) {
 		testApp,
 		"POST",
 		"/auth/login",
-		headers{"Content-Type": "application/json"},
+		nil,
 		payload{
 			"email":    dummyUser.Email,
 			"password": dummyUser.Password,

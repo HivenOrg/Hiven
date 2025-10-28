@@ -95,3 +95,56 @@ func (storage Storage) DownloadPresignedURL(ctx context.Context, key string, exp
 
 	return req.URL, nil
 }
+
+func (storage Storage) ListObjects(ctx context.Context, prefix *string) ([]string, error) {
+
+	var keys []string
+
+	input := &s3.ListObjectsV2Input{
+		Bucket: aws.String(storage.bucketName),
+	}
+
+	// Apply prefix if provided and not empty
+	if prefix != nil && strings.TrimSpace(*prefix) != "" {
+		input.Prefix = aws.String(strings.TrimSpace(*prefix))
+	}
+
+	paginator := s3.NewListObjectsV2Paginator(storage.client, input)
+
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list objects: %w", err)
+		}
+
+		for _, obj := range page.Contents {
+			if obj.Key != nil {
+				keys = append(keys, *obj.Key)
+			}
+		}
+	}
+
+	return keys, nil
+}
+
+func (storage Storage) DeleteObject(ctx context.Context, key string) error {
+	key = strings.TrimSpace(key)
+
+	if key == "" {
+		return fmt.Errorf("invalid S3 key: cannot be empty")
+	}
+
+	if strings.HasSuffix(key, "/") {
+		return fmt.Errorf("invalid S3 key: cannot end with '/' (prefix detected)")
+	}
+
+	_, err := storage.client.DeleteObject(ctx, &s3.DeleteObjectInput{
+		Bucket: aws.String(storage.bucketName),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to delete object %q: %w", key, err)
+	}
+
+	return nil
+}
