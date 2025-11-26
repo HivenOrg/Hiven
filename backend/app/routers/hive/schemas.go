@@ -29,3 +29,8 @@ type editHive struct {
 	Name    string `json:"name" validate:"required,min=1"`
 	Address string `json:"address" validate:"required,min=1"`
 }
+
+type addMember struct {
+	HiveID uint `json:"hive_id" validate:"required,gt=0"`
+	UserID uint `json:"user_id" validate:"required,gt=0"`
+}

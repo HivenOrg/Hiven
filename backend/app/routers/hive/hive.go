@@ -2,6 +2,7 @@ package hive
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"slices"
@@ -271,5 +272,71 @@ func HiveRouter(router fiber.Router, db *gorm.DB, s3 *storage.Storage) {
 		}
 
 		return c.SendStatus(fiber.StatusNoContent)
+	})
+
+	router.Post("/member/add", func(c *fiber.Ctx) error {
+
+		var reqBody addMember
+
+		// Parsing and Validating
+		err := utils.ParseAndValidate(c, &reqBody)
+		if err != nil {
+			return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		}
+
+		// Fetching current user details
+		currUserID, ok := c.Locals("user_id").(uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		currUserHiveIDs, ok := c.Locals("hive_ids").([]uint)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		// Checking if current user is authorized to perform this action
+		authorized, err := utils.IsActiveOwner(currUserID, currUserHiveIDs, reqBody.HiveID, db)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		if !authorized {
+			return c.SendStatus(fiber.StatusForbidden)
+		}
+
+		// fetch details of user to add
+		userToAdd, err := utils.GetUserById(reqBody.UserID, db)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		if userToAdd == nil {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"msg": "user with this id not found"})
+		}
+
+		// Is already a member
+		var existingMember database.Member
+		err = db.Where("hive_id = ? AND user_id = ?", reqBody.HiveID, reqBody.UserID).First(&existingMember).Error
+
+		// Record found, Already a member
+		if err == nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"msg": "user is already a member"})
+		}
+		// Actual DB error
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		// Add member
+		newMember := &database.Member{
+			HiveID: reqBody.HiveID,
+			UserID: reqBody.UserID,
+			Status: "active",
+			Role:   "member",
+		}
+		err = db.Create(newMember).Error
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.SendStatus(fiber.StatusOK)
 	})
 }
