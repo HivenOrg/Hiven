@@ -61,109 +61,225 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "register",
-					"event": [
+					"name": "User-1",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"let token = \"\";\r",
-									"\r",
-									"if (pm.response.code === 201) {\r",
-									"    try {\r",
-									"        const res = pm.response.json();\r",
-									"        token = res.bearer_token || \"\";\r",
-									"    }  catch (e) {}\r",
-									"}\r",
-									"\r",
-									"pm.collectionVariables.set(\"token\", token);\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"Sam\",\r\n    \"lastname\": \"Smith\",\r\n    \"phone_number\": \"+91100000000\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let token = \"\";\r",
+											"\r",
+											"if (pm.response.code === 201) {\r",
+											"    try {\r",
+											"        const res = pm.response.json();\r",
+											"        token = res.bearer_token || \"\";\r",
+											"    }  catch (e) {}\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/register",
-							"host": [
-								"{{baseUrl}}"
 							],
-							"path": [
-								"auth",
-								"register"
-							]
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"Sam\",\r\n    \"lastname\": \"Smith\",\r\n    \"phone_number\": \"+91100000000\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let token = \"\";\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"    try {\r",
+											"        const res = pm.response.json();\r",
+											"        token = res.bearer_token || \"\";\r",
+											"    }  catch (e) {}\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "login",
-					"event": [
+					"name": "User-2",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"let token = \"\";\r",
-									"\r",
-									"if (pm.response.code === 200) {\r",
-									"    try {\r",
-									"        const res = pm.response.json();\r",
-									"        token = res.bearer_token || \"\";\r",
-									"    }  catch (e) {}\r",
-									"}\r",
-									"\r",
-									"pm.collectionVariables.set(\"token\", token);\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "register User-2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let token = \"\";\r",
+											"\r",
+											"if (pm.response.code === 201) {\r",
+											"    try {\r",
+											"        const res = pm.response.json();\r",
+											"        token = res.bearer_token || \"\";\r",
+											"    }  catch (e) {}\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/login",
-							"host": [
-								"{{baseUrl}}"
 							],
-							"path": [
-								"auth",
-								"login"
-							]
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"phone_number\": \"+91100000001\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login User-2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let token = \"\";\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"    try {\r",
+											"        const res = pm.response.json();\r",
+											"        token = res.bearer_token || \"\";\r",
+											"    }  catch (e) {}\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -233,7 +349,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": []
+									"src": "/C:/Users/nakul/Downloads/miscellaneous/dfd.png"
 								}
 							]
 						},
@@ -344,6 +460,152 @@
 									"key": "id",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add member",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"user_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/hive/member/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"hive",
+								"member",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "My profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/my-profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"my-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update display img",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/nakul/Downloads/miscellaneous/Group 1.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/update-display-image",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"update-display-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search User By Phone",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone_number\": \"+91100000001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/search-by-phone",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"search-by-phone"
 							]
 						}
 					},
