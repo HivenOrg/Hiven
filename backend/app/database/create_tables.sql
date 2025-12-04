@@ -39,3 +39,15 @@ CREATE TABLE IF NOT EXISTS members (
     CONSTRAINT check_member_status CHECK (status IN ('active', 'left', 'removed')),
     CONSTRAINT check_member_role CHECK (role IN ('owner', 'member'))
 );
+
+-- Chores table
+CREATE TABLE IF NOT EXISTS chores (
+    id SERIAL PRIMARY KEY,
+    hive_id INT NOT NULL,
+    creator_id INT NOT NULL,
+    chore TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_chores_hive FOREIGN KEY (hive_id) REFERENCES hives(id) ON DELETE CASCADE,
+    CONSTRAINT fk_chores_user FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+);

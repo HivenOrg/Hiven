@@ -8,6 +8,7 @@ import (
 	"github.com/HivenOrg/Hiven/database"
 	"github.com/HivenOrg/Hiven/middleware"
 	"github.com/HivenOrg/Hiven/routers/auth"
+	"github.com/HivenOrg/Hiven/routers/chore"
 	"github.com/HivenOrg/Hiven/routers/hive"
 	"github.com/HivenOrg/Hiven/routers/user"
 	"github.com/HivenOrg/Hiven/storage"
@@ -65,6 +66,7 @@ func BuildApp(cfg config.Config, db *gorm.DB, s3 *storage.Storage) *fiber.App {
 
 	hive.HiveRouter(app.Group("/hive"), db, s3)
 	user.UserRouter(app.Group("/user"), db, s3)
+	chore.ChoreRouter(app.Group("/chore"), db)
 
 	return app
 }
