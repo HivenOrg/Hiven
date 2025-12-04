@@ -30,3 +30,11 @@ type Member struct {
 	Role     string
 	JoinedAt time.Time `gorm:"autoCreateTime"`
 }
+
+type Chore struct {
+	ID        uint `gorm:"primaryKey"`
+	HiveID    uint
+	CreatorID uint
+	Chore     string
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+}
