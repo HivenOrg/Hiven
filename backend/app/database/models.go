@@ -38,3 +38,11 @@ type Chore struct {
 	Chore     string
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 }
+
+type ShoppingItem struct {
+	ID        uint `gorm:"primaryKey"`
+	HiveID    uint
+	CreatorID uint
+	Item      string
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+}
