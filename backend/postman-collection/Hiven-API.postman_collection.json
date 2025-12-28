@@ -349,7 +349,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/nakul/Downloads/miscellaneous/dfd.png"
+									"src": []
 								}
 							]
 						},
@@ -557,7 +557,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/nakul/Downloads/miscellaneous/Group 1.png"
+									"src": []
 								}
 							]
 						},
@@ -714,6 +714,116 @@
 							"query": [
 								{
 									"key": "chore_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Shopping",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/shopping/list?hive_id=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shopping",
+								"list"
+							],
+							"query": [
+								{
+									"key": "hive_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"item\": \"light bulb\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/shopping/add",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shopping",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/shopping/remove?item_id=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"shopping",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "item_id",
 									"value": "1"
 								}
 							]
