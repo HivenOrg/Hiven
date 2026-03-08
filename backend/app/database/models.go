@@ -46,3 +46,13 @@ type ShoppingItem struct {
 	Item      string
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 }
+
+type CalendarEvent struct {
+	ID                  uint `gorm:"primaryKey"`
+	HiveID              uint
+	CreatorID           uint
+	EventTitle          string
+	EventTimestamp      time.Time
+	EventOriginTimezone string
+	CreatedAt           time.Time `gorm:"autoCreateTime"`
+}

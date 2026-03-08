@@ -1,869 +1,982 @@
 {
-	"info": {
-		"name": "Hiven-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "tests",
-			"item": [
-				{
-					"name": "test",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/test",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"test"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "test protected",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/test/protected",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"test",
-								"protected"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "User-1",
-					"item": [
-						{
-							"name": "register",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"let token = \"\";\r",
-											"\r",
-											"if (pm.response.code === 201) {\r",
-											"    try {\r",
-											"        const res = pm.response.json();\r",
-											"        token = res.bearer_token || \"\";\r",
-											"    }  catch (e) {}\r",
-											"}\r",
-											"\r",
-											"pm.collectionVariables.set(\"token\", token);\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"Sam\",\r\n    \"lastname\": \"Smith\",\r\n    \"phone_number\": \"+91100000000\"\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/register",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"let token = \"\";\r",
-											"\r",
-											"if (pm.response.code === 200) {\r",
-											"    try {\r",
-											"        const res = pm.response.json();\r",
-											"        token = res.bearer_token || \"\";\r",
-											"    }  catch (e) {}\r",
-											"}\r",
-											"\r",
-											"pm.collectionVariables.set(\"token\", token);\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/login",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"login"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "User-2",
-					"item": [
-						{
-							"name": "register User-2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"let token = \"\";\r",
-											"\r",
-											"if (pm.response.code === 201) {\r",
-											"    try {\r",
-											"        const res = pm.response.json();\r",
-											"        token = res.bearer_token || \"\";\r",
-											"    }  catch (e) {}\r",
-											"}\r",
-											"\r",
-											"pm.collectionVariables.set(\"token\", token);\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"phone_number\": \"+91100000001\"\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/register",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login User-2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"let token = \"\";\r",
-											"\r",
-											"if (pm.response.code === 200) {\r",
-											"    try {\r",
-											"        const res = pm.response.json();\r",
-											"        token = res.bearer_token || \"\";\r",
-											"    }  catch (e) {}\r",
-											"}\r",
-											"\r",
-											"pm.collectionVariables.set(\"token\", token);\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {},
-										"requests": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/login",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"login"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Hive",
-			"item": [
-				{
-					"name": "Create hive",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"New York Apartment\",\r\n    \"address\": \"57th Street, near Central Park\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/hive/create",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update display img",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "hive_id",
-									"value": "1",
-									"type": "text"
-								},
-								{
-									"key": "file",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseUrl}}/hive/update-display-image",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"update-display-image"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "my-hives",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/hive/my-hives",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"my-hives"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Edit",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"name\": \"Chicago apartment\",\r\n    \"address\": \"Madison St, Chicago, IL\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/hive/edit",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"edit"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/hive/delete?id=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"delete"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add member",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"user_id\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/hive/member/add",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"hive",
-								"member",
-								"add"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "My profile",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/user/my-profile",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"user",
-								"my-profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update display img",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseUrl}}/user/update-display-image",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"user",
-								"update-display-image"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search User By Phone",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"phone_number\": \"+91100000001\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/user/search-by-phone",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"user",
-								"search-by-phone"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Chore",
-			"item": [
-				{
-					"name": "list",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/chore/list?hive_id=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"chore",
-								"list"
-							],
-							"query": [
-								{
-									"key": "hive_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"chore\": \"Fix doorbell\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/chore/create",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"chore",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/chore/delete?chore_id=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"chore",
-								"delete"
-							],
-							"query": [
-								{
-									"key": "chore_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Shopping",
-			"item": [
-				{
-					"name": "List",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/shopping/list?hive_id=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"shopping",
-								"list"
-							],
-							"query": [
-								{
-									"key": "hive_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"hive_id\": 1,\r\n    \"item\": \"light bulb\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/shopping/add",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"shopping",
-								"add"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Remove",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/shopping/remove?item_id=1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"shopping",
-								"remove"
-							],
-							"query": [
-								{
-									"key": "item_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:3000"
-		},
-		{
-			"key": "token",
-			"value": ""
-		}
-	]
+  "info": {
+    "name": "Hiven-API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "tests",
+      "item": [
+        {
+          "name": "test",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "test protected",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test/protected",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test",
+                "protected"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "User-1",
+          "item": [
+            {
+              "name": "register",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let token = \"\";\r",
+                      "\r",
+                      "if (pm.response.code === 201) {\r",
+                      "    try {\r",
+                      "        const res = pm.response.json();\r",
+                      "        token = res.bearer_token || \"\";\r",
+                      "    }  catch (e) {}\r",
+                      "}\r",
+                      "\r",
+                      "pm.collectionVariables.set(\"token\", token);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"Sam\",\r\n    \"lastname\": \"Smith\",\r\n    \"phone_number\": \"+91100000000\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let token = \"\";\r",
+                      "\r",
+                      "if (pm.response.code === 200) {\r",
+                      "    try {\r",
+                      "        const res = pm.response.json();\r",
+                      "        token = res.bearer_token || \"\";\r",
+                      "    }  catch (e) {}\r",
+                      "}\r",
+                      "\r",
+                      "pm.collectionVariables.set(\"token\", token);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"samsmith@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "User-2",
+          "item": [
+            {
+              "name": "register User-2",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let token = \"\";\r",
+                      "\r",
+                      "if (pm.response.code === 201) {\r",
+                      "    try {\r",
+                      "        const res = pm.response.json();\r",
+                      "        token = res.bearer_token || \"\";\r",
+                      "    }  catch (e) {}\r",
+                      "}\r",
+                      "\r",
+                      "pm.collectionVariables.set(\"token\", token);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\",\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"phone_number\": \"+91100000001\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "login User-2",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let token = \"\";\r",
+                      "\r",
+                      "if (pm.response.code === 200) {\r",
+                      "    try {\r",
+                      "        const res = pm.response.json();\r",
+                      "        token = res.bearer_token || \"\";\r",
+                      "    }  catch (e) {}\r",
+                      "}\r",
+                      "\r",
+                      "pm.collectionVariables.set(\"token\", token);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hive",
+      "item": [
+        {
+          "name": "Create hive",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"New York Apartment\",\r\n    \"address\": \"57th Street, near Central Park\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hive/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update display img",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "hive_id",
+                  "type": "text",
+                  "uuid": "976f905f-fad2-4836-a81b-09897630c02f",
+                  "value": "1"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "4b749137-bbd7-4234-9692-596befc90a25",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hive/update-display-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "update-display-image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "my-hives",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hive/my-hives",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "my-hives"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hive_id\": 1,\r\n    \"name\": \"Chicago apartment\",\r\n    \"address\": \"Madison St, Chicago, IL\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hive/edit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "edit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hive/delete?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add member",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hive_id\": 1,\r\n    \"user_id\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hive/member/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hive",
+                "member",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "My profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/my-profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "my-profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update display img",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "4b749137-bbd7-4234-9692-596befc90a25",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/update-display-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "update-display-image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search User By Phone",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"phone_number\": \"+91100000001\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/search-by-phone",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "search-by-phone"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chore",
+      "item": [
+        {
+          "name": "list",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chore/list?hive_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chore",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "hive_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hive_id\": 1,\r\n    \"chore\": \"Fix doorbell\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chore/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chore",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chore/delete?chore_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chore",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "chore_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Shopping",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/shopping/list?hive_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shopping",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "hive_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hive_id\": 1,\r\n    \"item\": \"light bulb\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shopping/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shopping",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/shopping/remove?item_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shopping",
+                "remove"
+              ],
+              "query": [
+                {
+                  "key": "item_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Calendar",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/calendar/list?hive_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "calendar",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "hive_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"hive_id\": 1,\r\n    \"event_title\": \"Siddhant's birthday\",\r\n    \"event_timestamp\": \"2026-12-11T10:00:00+05:30\",\r\n    \"event_origin_timezone\": \"Asia/Kolkata\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/calendar/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "calendar",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/calendar/delete?event_id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "calendar",
+                "delete"
+              ],
+              "query": [
+                {
+                  "key": "event_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
 }
