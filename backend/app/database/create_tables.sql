@@ -51,3 +51,35 @@ CREATE TABLE IF NOT EXISTS chores (
     CONSTRAINT fk_chores_hive FOREIGN KEY (hive_id) REFERENCES hives(id) ON DELETE CASCADE,
     CONSTRAINT fk_chores_user FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_chores_hive_id ON chores(hive_id);
+
+-- Shopping items table
+CREATE TABLE IF NOT EXISTS shopping_items (
+    id SERIAL PRIMARY KEY,
+    hive_id INT NOT NULL,
+    creator_id INT NOT NULL,
+    item TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_shopping_items_hive FOREIGN KEY (hive_id) REFERENCES hives(id) ON DELETE CASCADE,
+    CONSTRAINT fk_shopping_items_user FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_shopping_items_hive_id ON shopping_items(hive_id);
+
+-- Calendar events table
+CREATE TABLE IF NOT EXISTS calendar_events (
+    id SERIAL PRIMARY KEY,
+    hive_id INT NOT NULL,
+    creator_id INT NOT NULL,
+    event_title TEXT NOT NULL,
+    event_timestamp TIMESTAMPTZ NOT NULL,
+    event_origin_timezone TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_calendar_events_hive FOREIGN KEY (hive_id) REFERENCES hives(id) ON DELETE CASCADE,
+    CONSTRAINT fk_calendar_events_user FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_calendar_events_hive_time ON calendar_events(hive_id, event_timestamp ASC);
